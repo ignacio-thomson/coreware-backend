@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateComponentById = exports.deleteComponent = exports.getComponentById = exports.getAllComponents = void 0;
 const Component_entity_1 = require("../entities/Component.entity");
 const logger_1 = require("../../utils/logger");
-// CRUD Requests
+// * CRUD Requests
 // Method to get all the components from the Components collection in MongoDB with pagination
 const getAllComponents = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {

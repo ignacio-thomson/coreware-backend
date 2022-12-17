@@ -2,8 +2,6 @@ import { IComponentController } from "./interfaces/index";
 import { Get, Route, Tags, Query, Delete, Put } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 
-// ! Se cambiaron datos de tipo any a unknown, probar que el funcionamiento siga siendo el correcto. QUITAR ESTA LINEA
-
 // Import ORM
 import { getAllComponents, getComponentById, deleteComponent, updateComponentById } from "../domain/orm/Component.orm";
 
@@ -18,9 +16,9 @@ export class ComponentController implements IComponentController {
      * @param id Optional id param to find a particular component.
      */
     @Get("/")
-    public async getComponents(@Query() page: number, @Query() limit: number, @Query() id?: string): Promise<unknown> {
+    public async getComponents(@Query() page: number, @Query() limit: number, @Query() id?: string): Promise<any> {
         
-        let response: unknown = "";
+        let response: any = "";
 
         if(id){
             response = await getComponentById(id);
@@ -38,9 +36,9 @@ export class ComponentController implements IComponentController {
      * @param id of the component thats going to be deleted.
      */
     @Delete("/")
-    public async deleteComponent(@Query() id: string | undefined): Promise<unknown> {
+    public async deleteComponent(@Query() id: string | undefined): Promise<any> {
         
-        let response: unknown = "";
+        let response: any = "";
 
         if(id){
             deleteComponent(id).then(() => {
@@ -66,9 +64,9 @@ export class ComponentController implements IComponentController {
      * @param component that is being updated.
      */
     @Put("/")
-    public async updateComponent(@Query() id: string, component: unknown): Promise<unknown> {
+    public async updateComponent(@Query() id: string, component: any): Promise<any> {
         
-        let response: unknown = "";
+        let response: any = "";
 
         if(id){
             await updateComponentById(id, component).then(() => {

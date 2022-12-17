@@ -14,18 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const WarehousesController_1 = require("../controller/WarehousesController");
-// TODO Implement middleware token verification.
+const verifyToken_middleware_1 = require("../middleware/verifyToken.middleware");
 // Router from express.
-let warehousesRouter = express_1.default.Router();
+const warehousesRouter = express_1.default.Router();
 warehousesRouter.route("/")
     // * GET
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     // Obtain the ID from the URL
-    let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
+    const id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
     // Pagination
-    let page = ((_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.page) || 1;
-    let limit = ((_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.limit) || 10;
+    const page = ((_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.page) || 1;
+    const limit = ((_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.limit) || 10;
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();
     // Get the response
@@ -34,10 +34,10 @@ warehousesRouter.route("/")
     return res.status(200).send(response);
 }))
     // * DELETE
-    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _d;
     // Obtain the ID from the URL
-    let id = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.id;
+    const id = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.id;
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();
     // Get the response
@@ -46,15 +46,15 @@ warehousesRouter.route("/")
     return res.status(200).send(response);
 }))
     // * PUT
-    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .put(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e, _f, _g;
     // Obtain the ID from the URL
-    let id = req.query.id;
+    const id = req.query.id;
     // Build new warehouse through query params
-    let warehouse = {
-        brand: (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.brand,
-        model: (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.model,
-        price: (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.price
+    const warehouse = {
+        brand: (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.name,
+        model: (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.location,
+        price: (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.stockAvailable
     };
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();

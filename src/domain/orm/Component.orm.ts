@@ -2,7 +2,7 @@ import { componentEntity } from "../entities/Component.entity";
 import { LogError } from "../../utils/logger";
 import { IComponent } from "../interfaces/IComponent.intefarce";
 
-// CRUD Requests
+// * CRUD Requests
 
 // Method to get all the components from the Components collection in MongoDB with pagination
 export const getAllComponents = async (page: number, limit: number): Promise<any | undefined> => {

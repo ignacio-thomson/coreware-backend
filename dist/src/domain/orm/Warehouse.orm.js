@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateWarehouseById = exports.deleteWarehouse = exports.getWarehouseById = exports.getAllWarehouses = void 0;
 const Warehouse_entity_1 = require("../entities/Warehouse.entity");
 const logger_1 = require("../../utils/logger");
-// CRUD Requests
+// * CRUD Requests
 // Method to get all the warehouses from the Warehouses collection in MongoDB with pagination
 const getAllWarehouses = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -20,7 +20,7 @@ const getAllWarehouses = (page, limit) => __awaiter(void 0, void 0, void 0, func
         let response = {};
         // Search all warehouses using pagination
         yield warehouseModel.find({ isDeleted: false })
-            .select("brand model price")
+            .select("name location stockavailable")
             .limit(limit)
             .skip((page - 1) * limit)
             .exec().then((warehouses) => {

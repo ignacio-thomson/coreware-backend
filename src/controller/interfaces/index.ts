@@ -28,6 +28,15 @@ export interface IDistributorController {
     updateDistributor(id: string, distributor: any): Promise<any>;
 }
 
+export interface IUsersController {
+    // Get users
+    getUsers(page: number, limit: number, id?: string): Promise<any>;
+    // Delete user
+    deleteUser(id: string): Promise<any>;
+    // Update user by ID
+    updateUser(id: string, warehouse: any): Promise<any>;
+}
+
 export interface IAuthController {
     // Register new users
     registerUser(user: IUser): Promise<any>;

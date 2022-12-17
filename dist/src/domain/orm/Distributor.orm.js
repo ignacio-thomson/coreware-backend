@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDistributorById = exports.deleteDistributor = exports.getDistributorById = exports.getAllDistributors = void 0;
 const Distributor_entity_1 = require("../entities/Distributor.entity");
 const logger_1 = require("../../utils/logger");
-// CRUD Requests
+// * CRUD Requests
 // Method to get all the distributors from the Distributors collection in MongoDB with pagination
 const getAllDistributors = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -20,7 +20,7 @@ const getAllDistributors = (page, limit) => __awaiter(void 0, void 0, void 0, fu
         let response = {};
         // Search all distributors using pagination
         yield distributorModel.find({ isDeleted: false })
-            .select("brand model price")
+            .select("address name officialdistributor")
             .limit(limit)
             .skip((page - 1) * limit)
             .exec().then((distributors) => {

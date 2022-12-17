@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
-import { WarehouseController } from "../controller/WarehousesController";
+import { UsersController } from "../controller/UsersController";
 
 import { verifyToken } from "../middleware/verifyToken.middleware";
 
 // Router from express.
-const warehousesRouter = express.Router();
+const usersRouter = express.Router();
 
-warehousesRouter.route("/")
+usersRouter.route("/")
     // * GET
     .get(verifyToken, async (req: Request, res: Response) => {
 
@@ -18,10 +18,10 @@ warehousesRouter.route("/")
         const limit: any = req?.query?.limit || 10;
 
         // Generate controller instance to execute the desired method
-        const controller: WarehouseController = new WarehouseController();
+        const controller: UsersController = new UsersController();
 
         // Get the response
-        const response: any = await controller.getWarehouses(page, limit, id);
+        const response: any = await controller.getUsers(page, limit, id);
 
         // Send response to client
         return res.status(200).send(response);
@@ -34,10 +34,10 @@ warehousesRouter.route("/")
         const id: any = req?.query?.id;
 
         // Generate controller instance to execute the desired method
-        const controller: WarehouseController = new WarehouseController();
+        const controller: UsersController = new UsersController();
 
         // Get the response
-        const response: any = await controller.deleteWarehouse(id);
+        const response: any = await controller.deleteUser(id);
 
         // Send response to client
         return res.status(200).send(response);
@@ -49,22 +49,22 @@ warehousesRouter.route("/")
         // Obtain the ID from the URL
         const id: any = req.query.id;
 
-        // Build new warehouse through query params
-        const warehouse = {
-            brand: req?.query?.name,
-            model: req?.query?.location,
-            price: req?.query?.stockAvailable
+        // Build new component through query params
+        const component = {
+            brand: req?.query?.brand,
+            model: req?.query?.model,
+            price: req?.query?.price
         }
 
         // Generate controller instance to execute the desired method
-        const controller: WarehouseController = new WarehouseController();
+        const controller: UsersController = new UsersController();
 
         // Get the response
-        const response: any = await controller.updateWarehouse(id, warehouse);
+        const response: any = await controller.updateUser(id, component);
 
         // Send response to client
         return res.status(204).send(response);
 
     });
 
-export default warehousesRouter;
+export default usersRouter;

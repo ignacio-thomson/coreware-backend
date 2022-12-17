@@ -12,6 +12,8 @@ const logger_1 = require("../utils/logger");
 const ComponentsRouter_1 = __importDefault(require("./ComponentsRouter"));
 const WarehousesRouter_1 = __importDefault(require("./WarehousesRouter"));
 const DistributorsRoutes_1 = __importDefault(require("./DistributorsRoutes"));
+const AuthRouter_1 = __importDefault(require("./AuthRouter"));
+const UsersRouter_1 = __importDefault(require("./UsersRouter"));
 // Generate the server instance
 const server = (0, express_1.default)();
 // Generate a router instance
@@ -25,5 +27,7 @@ server.use("/", rootRouter);
 server.use("/components", ComponentsRouter_1.default);
 server.use("/warehouses", WarehousesRouter_1.default);
 server.use("/distributors", DistributorsRoutes_1.default);
+server.use("/auth", AuthRouter_1.default);
+server.use("/users", UsersRouter_1.default);
 exports.default = server;
 //# sourceMappingURL=index.js.map

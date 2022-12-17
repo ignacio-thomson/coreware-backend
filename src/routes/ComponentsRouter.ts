@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { ComponentController } from "../controller/ComponentsController";
 
-import { verifyToken } from "src/middleware/verifyToken.middleware";
+import { verifyToken } from "../middleware/verifyToken.middleware";
 
 // Router from express.
 const componentsRouter = express.Router();

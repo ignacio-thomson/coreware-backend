@@ -7,6 +7,8 @@ import { LogInfo } from "../utils/logger";
 import componentsRouter from "./ComponentsRouter";
 import warehousesRouter from "./WarehousesRouter";
 import distributorsRouter from "./DistributorsRoutes";
+import authRouter from "./AuthRouter";
+import usersRouter from "./UsersRouter";
 
 // Generate the server instance
 const server = express();
@@ -24,5 +26,8 @@ server.use("/", rootRouter);
 server.use("/components", componentsRouter);
 server.use("/warehouses", warehousesRouter);
 server.use("/distributors", distributorsRouter);
+server.use("/auth", authRouter);
+server.use("/users", usersRouter)
+
 
 export default server;

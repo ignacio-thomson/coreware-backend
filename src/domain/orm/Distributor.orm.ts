@@ -2,7 +2,7 @@ import { distributorEntity } from "../entities/Distributor.entity";
 import { LogError } from "../../utils/logger";
 import { IDistributor } from "../interfaces/IDistributor.interface";
 
-// CRUD Requests
+// * CRUD Requests
 
 // Method to get all the distributors from the Distributors collection in MongoDB with pagination
 export const getAllDistributors = async (page: number, limit: number): Promise<any | undefined> => {
@@ -14,7 +14,7 @@ export const getAllDistributors = async (page: number, limit: number): Promise<a
 
         // Search all distributors using pagination
         await distributorModel.find({ isDeleted: false })
-        .select("brand model price")
+        .select("address name officialdistributor")
         .limit(limit)
         .skip((page - 1) * limit)
         .exec().then((distributors: IDistributor[]) => {

@@ -2,7 +2,7 @@ import { warehouseEntity } from "../entities/Warehouse.entity";
 import { LogError } from "../../utils/logger";
 import { IWarehouse } from "../interfaces/IWarehouse.interface";
 
-// CRUD Requests
+// * CRUD Requests
 
 // Method to get all the warehouses from the Warehouses collection in MongoDB with pagination
 export const getAllWarehouses = async (page: number, limit: number): Promise<any | undefined> => {
@@ -14,7 +14,7 @@ export const getAllWarehouses = async (page: number, limit: number): Promise<any
 
         // Search all warehouses using pagination
         await warehouseModel.find({ isDeleted: false })
-        .select("brand model price")
+        .select("name location stockavailable")
         .limit(limit)
         .skip((page - 1) * limit)
         .exec().then((warehouses: IWarehouse[]) => {

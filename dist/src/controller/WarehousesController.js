@@ -44,6 +44,7 @@ let WarehouseController = class WarehouseController {
                 response = yield (0, Warehouse_orm_1.getAllWarehouses)(page, limit);
                 (0, logger_1.LogSuccess)("[/api/warehouses/] GET Warehouses request.");
             }
+            return response;
         });
     }
     /**

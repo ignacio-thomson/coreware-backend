@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { DistributorController } from "../controller/DistributorsController";
 
-import { verifyToken } from "src/middleware/verifyToken.middleware";
+import { verifyToken } from "../middleware/verifyToken.middleware";
 
 // Router from express.
 const distributorsRouter = express.Router();
@@ -52,8 +52,8 @@ distributorsRouter.route("/")
         // Build new distributor through query params
         const distributors = {
             brand: req?.query?.brand,
-            model: req?.query?.model,
-            price: req?.query?.price
+            model: req?.query?.adress,
+            price: req?.query?.officialDistributor
         }
 
         // Generate controller instance to execute the desired method
