@@ -24,7 +24,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComponentController = void 0;
 const tsoa_1 = require("tsoa");
 const logger_1 = require("../utils/logger");
-// ! Se cambiaron datos de tipo any a unknown, probar que el funcionamiento siga siendo el correcto. QUITAR ESTA LINEA
 // Import ORM
 const Component_orm_1 = require("../domain/orm/Component.orm");
 let ComponentController = class ComponentController {
@@ -34,7 +33,7 @@ let ComponentController = class ComponentController {
      * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular component.
      */
-    getComponents(page, limit, id) {
+    getComponents(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
@@ -42,7 +41,7 @@ let ComponentController = class ComponentController {
                 (0, logger_1.LogSuccess)("[/api/components/] GET Component by ID request.");
             }
             else {
-                response = yield (0, Component_orm_1.getAllComponents)(page, limit);
+                response = yield (0, Component_orm_1.getAllComponents)();
                 (0, logger_1.LogSuccess)("[/api/components/] GET Components request.");
             }
             return response;
@@ -97,14 +96,32 @@ let ComponentController = class ComponentController {
             return response;
         });
     }
+    postComponents(component) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (component) {
+                yield (0, Component_orm_1.createComponent)(component).then(() => {
+                    response = {
+                        message: `Component created succesfully: ${component.brand} - ${component.model}`
+                    };
+                });
+                (0, logger_1.LogSuccess)(`[/api/components] POST new Component: ${component.brand}`);
+            }
+            else {
+                (0, logger_1.LogWarning)("[/api/components] POST new Component");
+                response = {
+                    message: `Failed to create a new component, please provide a valid entry`
+                };
+            }
+            return response;
+        });
+    }
 };
 __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)()),
-    __param(1, (0, tsoa_1.Query)()),
-    __param(2, (0, tsoa_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ComponentController.prototype, "getComponents", null);
 __decorate([
@@ -121,6 +138,12 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ComponentController.prototype, "updateComponent", null);
+__decorate([
+    (0, tsoa_1.Post)("/"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ComponentController.prototype, "postComponents", null);
 ComponentController = __decorate([
     (0, tsoa_1.Route)("/api/components"),
     (0, tsoa_1.Tags)("Components")

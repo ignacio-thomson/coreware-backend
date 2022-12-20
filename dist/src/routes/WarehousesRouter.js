@@ -14,30 +14,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const WarehousesController_1 = require("../controller/WarehousesController");
+const body_parser_1 = __importDefault(require("body-parser"));
 const verifyToken_middleware_1 = require("../middleware/verifyToken.middleware");
 // Router from express.
 const warehousesRouter = express_1.default.Router();
+const jsonParser = body_parser_1.default.json();
 warehousesRouter.route("/")
     // * GET
     .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a;
     // Obtain the ID from the URL
     const id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
-    // Pagination
-    const page = ((_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.page) || 1;
-    const limit = ((_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.limit) || 10;
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();
     // Get the response
-    const response = yield controller.getWarehouses(page, limit, id);
+    const response = yield controller.getWarehouses(id);
     // Send response to client
     return res.status(200).send(response);
 }))
     // * DELETE
     .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d;
+    var _b;
     // Obtain the ID from the URL
-    const id = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.id;
+    const id = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.id;
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();
     // Get the response
@@ -46,22 +45,36 @@ warehousesRouter.route("/")
     return res.status(200).send(response);
 }))
     // * PUT
-    .put(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f, _g;
+    .put(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
     // Obtain the ID from the URL
     const id = req.query.id;
     // Build new warehouse through query params
     const warehouse = {
-        brand: (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.name,
-        model: (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.location,
-        price: (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.stockAvailable
+        name: (_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.name,
+        location: (_d = req === null || req === void 0 ? void 0 : req.body) === null || _d === void 0 ? void 0 : _d.location,
     };
     // Generate controller instance to execute the desired method
     const controller = new WarehousesController_1.WarehouseController();
     // Get the response
     const response = yield controller.updateWarehouse(id, warehouse);
     // Send response to client
-    return res.status(204).send(response);
+    return res.status(200).send(response);
+}))
+    // * POST
+    .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    // Build new component through body params
+    const warehouse = {
+        name: (_e = req === null || req === void 0 ? void 0 : req.body) === null || _e === void 0 ? void 0 : _e.name,
+        location: (_f = req === null || req === void 0 ? void 0 : req.body) === null || _f === void 0 ? void 0 : _f.location,
+    };
+    // Generate controller instance to execute the desired method
+    const controller = new WarehousesController_1.WarehouseController();
+    // Get the response
+    const response = yield controller.postWarehouse(warehouse);
+    // Send response to client
+    return res.status(200).send(response);
 }));
 exports.default = warehousesRouter;
 //# sourceMappingURL=WarehousesRouter.js.map

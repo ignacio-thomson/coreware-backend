@@ -6,10 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.warehouseEntity = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const warehouseEntity = () => {
-    let warehouseSchema = new mongoose_1.default.Schema({
+    const warehouseSchema = new mongoose_1.default.Schema({
         name: { type: String, required: true },
         location: { type: String, required: true },
-        stockavailable: { type: Boolean, required: true }
     });
     return mongoose_1.default.models.Warehouses || mongoose_1.default.model('Warehouses', warehouseSchema, 'warehouses');
 };

@@ -1,9 +1,9 @@
 import { IWarehouseController } from "./interfaces/index";
-import { Get, Route, Tags, Query, Delete, Put } from "tsoa";
+import { Get, Route, Tags, Query, Delete, Put, Post } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 
 // Import ORM
-import { getAllWarehouses, getWarehouseById, deleteWarehouse, updateWarehouseById } from "../domain/orm/Warehouse.orm";
+import { getAllWarehouses, getWarehouseById, deleteWarehouse, updateWarehouseById, createWarehouse } from "../domain/orm/Warehouse.orm";
 
 @Route("/api/warehouses")
 @Tags("Warehouses")
@@ -16,7 +16,7 @@ export class WarehouseController implements IWarehouseController {
      * @param id Optional id param to find a particular warehouse.
      */
     @Get("/")
-    public async getWarehouses(@Query() page: number, limit: number, id?: string | undefined): Promise<any> {
+    public async getWarehouses(id?: string | undefined): Promise<any> {
         
         let response: any = "";
 
@@ -24,7 +24,7 @@ export class WarehouseController implements IWarehouseController {
             response = await getWarehouseById(id);
             LogSuccess("[/api/warehouses/] GET Warehouse by ID request.");
         } else {
-            response = await getAllWarehouses(page, limit);
+            response = await getAllWarehouses();
             LogSuccess("[/api/warehouses/] GET Warehouses request.");
         }
 
@@ -80,6 +80,33 @@ export class WarehouseController implements IWarehouseController {
             response = {
                 message: `Please provide a valid ID.`
             };
+        }
+
+        return response;
+
+    }
+
+    /**
+     * Endpoint to generate new document.
+     * @param warehouse that is going to be created in the Database.
+     */
+    @Post("/")
+    public async postWarehouse(warehouse: any): Promise<any> {
+
+        let response: any = "";
+
+        if(warehouse){
+            await createWarehouse(warehouse).then(() => {
+                response = {
+                    message: `Warehouse created succesfully: ${warehouse.name} - ${warehouse.location}`
+                }
+            });
+            LogSuccess(`[/api/warehouses] POST new Warehouse: ${warehouse.name}`);
+        } else {
+            LogWarning("[/api/warehouses] POST new Warehouse");
+            response = {
+                message: `Failed to create a new warehouse, please provide a valid entry`
+            }
         }
 
         return response;

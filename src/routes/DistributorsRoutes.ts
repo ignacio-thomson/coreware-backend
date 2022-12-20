@@ -1,10 +1,15 @@
 import express, { Request, Response } from "express";
 import { DistributorController } from "../controller/DistributorsController";
+import bodyParser from "body-parser";
 
 import { verifyToken } from "../middleware/verifyToken.middleware";
 
 // Router from express.
 const distributorsRouter = express.Router();
+
+
+// Body parser
+const jsonParser = bodyParser.json();
 
 distributorsRouter.route("/")
     // * GET
@@ -13,15 +18,11 @@ distributorsRouter.route("/")
         // Obtain the ID from the URL
         const id: any = req?.query?.id;
 
-        // Pagination
-        const page: any = req?.query?.page || 1;
-        const limit: any = req?.query?.limit || 10;
-
         // Generate controller instance to execute the desired method
         const controller: DistributorController = new DistributorController();
 
         // Get the response
-        const response: any = await controller.getDistributors(page, limit, id);
+        const response: any = await controller.getDistributors(id);
 
         // Send response to client
         return res.status(200).send(response);
@@ -44,16 +45,15 @@ distributorsRouter.route("/")
 
     })
     // * PUT
-    .put(verifyToken, async (req: Request, res: Response) => {
+    .put(jsonParser, verifyToken, async (req: Request, res: Response) => {
 
         // Obtain the ID from the URL
         const id: any = req.query.id;
 
         // Build new distributor through query params
         const distributors = {
-            brand: req?.query?.brand,
-            model: req?.query?.adress,
-            price: req?.query?.officialDistributor
+            name: req?.body?.name,
+            address: req?.body?.address
         }
 
         // Generate controller instance to execute the desired method
@@ -63,7 +63,26 @@ distributorsRouter.route("/")
         const response: any = await controller.updateDistributor(id, distributors);
 
         // Send response to client
-        return res.status(204).send(response);
+        return res.status(200).send(response);
+
+    })
+    // * POST
+    .post(jsonParser, async (req: Request, res: Response) => {
+
+        // Build new component through body
+        const distributor = {
+            name: req?.body?.name,
+            address: req?.body?.address,
+        } 
+
+        // Generate controller instance to execute the desired method
+        const controller: DistributorController = new DistributorController();
+
+        // Get the response
+        const response: any = await controller.postDistributor(distributor);
+
+        // Send response to client
+        return res.status(200).send(response);
 
     });
 

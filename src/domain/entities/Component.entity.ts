@@ -3,7 +3,7 @@ import { IComponent } from "../interfaces/IComponent.intefarce";
 
 export const componentEntity = () => {
 
-    let componentSchema = new mongoose.Schema<IComponent>(
+    const componentSchema = new mongoose.Schema<IComponent>(
         {
             brand: {type: String, required: true},
             model: {type: String, required: true},

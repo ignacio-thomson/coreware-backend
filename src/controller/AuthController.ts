@@ -1,5 +1,5 @@
 import { IAuthController } from "./interfaces";
-import { Get, Route, Tags, Post } from "tsoa";
+import { Route, Tags, Post } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 import { IUser } from "../domain/interfaces/IUser.interface";
 import { IAuth } from "../domain/interfaces/IAuth.interface";
@@ -7,7 +7,6 @@ import { IAuth } from "../domain/interfaces/IAuth.interface";
 // Import ORM
 import { registerUser, loginUser  } from "../domain/orm/Auth.orm";
 import { AuthResponse } from "./responses";
-import { getUserById } from "../domain/orm/User.orm";
 
 @Route("/api/auth")
 @Tags("Users")
@@ -24,7 +23,7 @@ export class AuthController implements IAuthController {
         let response: any = "";
 
         if(user){
-            await registerUser(user)!.then(() => {
+            await registerUser(user)?.then(() => {
                 response = {
                     message: `User registered succesfully ${user.firstName} ${user.lastName}`
                 }
@@ -51,9 +50,9 @@ export class AuthController implements IAuthController {
         let response: AuthResponse | undefined;
 
         if(auth){
-            let data = await loginUser(auth);
+            const data = await loginUser(auth);
             response = {
-                message: `Bienvenido/a, ${data.user.firstName}`,
+                message: `Welcome, ${data.user.firstName}`,
                 token: data.token
             }
             LogSuccess(`[/api/auth/login] User logged in succesfully: ${auth.email}`);
@@ -68,33 +67,6 @@ export class AuthController implements IAuthController {
         console.log(response)
         return response;
 
-    }
-
-    /**
-     * Method to log out the user, still not implemented.
-     */
-    logoutUser(): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * Endpoint to check our user details.
-     * @param id - self ID to check our account details
-     * @returns the response which confirms if the user information was found or not.
-     */
-    @Get("/me")
-    public async userData(id: string): Promise<any> {
-        let response: any = "";
-        if(id){
-            response = await getUserById(id);
-            LogSuccess(`[/api/auth/me] Get account details of ID: ${id}`);
-        } else {
-            response = {
-                message: "A valid ID must be used"
-            }
-            LogWarning("[/api/auth/me] Not able to retrieve the user information.");
-        }
-        return response;
     }
     
 }

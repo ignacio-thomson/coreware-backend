@@ -5,7 +5,7 @@ import { IComponent } from "../interfaces/IComponent.intefarce";
 // * CRUD Requests
 
 // Method to get all the components from the Components collection in MongoDB with pagination
-export const getAllComponents = async (page: number, limit: number): Promise<any | undefined> => {
+export const getAllComponents = async (): Promise<any | undefined> => {
 
     try {
 
@@ -15,15 +15,8 @@ export const getAllComponents = async (page: number, limit: number): Promise<any
         // Search all components using pagination
         await componentModel.find({ isDeleted: false })
         .select("brand model price")
-        .limit(limit)
-        .skip((page - 1) * limit)
-        .exec().then((components: IComponent[]) => {
+        .then((components: IComponent[]) => {
             response.components = components;
-        });
-
-        await componentModel.countDocuments().then((total: number) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
 
         return response;
@@ -62,3 +55,13 @@ export const updateComponentById = async(id: string, component: any): Promise<an
         LogError(`[ORM ERROR] Updating component by ID ${error}`);
     }
 } 
+
+// Create component
+export const createComponent = async(component: any): Promise<any | undefined> => {
+    try {
+        const componentModel = componentEntity();
+        return await componentModel.create(component);
+    } catch(error) {
+        LogError(`[ORM ERROR] Creating new component ${error}`);
+    }
+}

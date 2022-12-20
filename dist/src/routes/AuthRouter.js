@@ -18,19 +18,19 @@ const AuthController_1 = require("../controller/AuthController");
 const body_parser_1 = __importDefault(require("body-parser"));
 const verifyToken_middleware_1 = require("../middleware/verifyToken.middleware");
 // Body parser
-let jsonParser = body_parser_1.default.json();
+const jsonParser = body_parser_1.default.json();
 const authRouter = express_1.default.Router();
 authRouter.route("/register")
     // * POST
     .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // eslint-disable-next-line no-unsafe-optional-chaining
-    let { firstName, lastName, age, email, password } = req === null || req === void 0 ? void 0 : req.body;
+    const { firstName, lastName, age, email, password } = req === null || req === void 0 ? void 0 : req.body;
     let hashedPassword = "";
     if (firstName && lastName && age && email && password) {
         // Obtain password in the request, and hash it.
         hashedPassword = bcrypt_1.default.hashSync(password, 8);
         // Build new user with request body info.
-        let newUser = {
+        const newUser = {
             firstName,
             lastName,
             age,
@@ -54,10 +54,10 @@ authRouter.route("/register")
 authRouter.route("/login")
     .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // eslint-disable-next-line no-unsafe-optional-chaining
-    let { email, password } = req === null || req === void 0 ? void 0 : req.body;
+    const { email, password } = req === null || req === void 0 ? void 0 : req.body;
     if (email && password) {
         // Build new auth with request body info.
-        let auth = {
+        const auth = {
             email: email,
             password: password
         };
@@ -80,7 +80,7 @@ authRouter.route("/me")
     .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     // Obtain ID of user to check its data
-    let id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
+    const id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
     if (id) {
         // Generate new instance of AuthController
         const controller = new AuthController_1.AuthController();

@@ -4,19 +4,19 @@ import { IUser } from "../domain/interfaces/IUser.interface";
 import { IAuth } from "../domain/interfaces/IAuth.interface";
 import { AuthController } from "../controller/AuthController";
 import bodyParser from "body-parser";
-import { verifyToken } from "../middleware/verifyToken.middleware";
+
+// Router from express
+const authRouter = express.Router();
 
 // Body parser
-let jsonParser = bodyParser.json();
-
-const authRouter = express.Router();
+const jsonParser = bodyParser.json();
 
 authRouter.route("/register")
     // * POST
     .post(jsonParser, async(req: Request, res: Response) => {
 
         // eslint-disable-next-line no-unsafe-optional-chaining
-        let { firstName, lastName, age, email, password } = req?.body;
+        const { firstName, lastName, age, email, password } = req?.body;
         let hashedPassword = "";
 
         if(firstName && lastName && age && email && password) {
@@ -25,7 +25,7 @@ authRouter.route("/register")
             hashedPassword = bcrypt.hashSync(password, 8);
 
             // Build new user with request body info.
-            let newUser: IUser = {
+            const newUser: IUser = {
                 firstName,
                 lastName,
                 age,
@@ -54,15 +54,16 @@ authRouter.route("/register")
     });
 
 authRouter.route("/login")
+    //* POST
     .post(jsonParser, async(req: Request, res: Response) => {
 
         // eslint-disable-next-line no-unsafe-optional-chaining
-        let {email, password} = req?.body;
+        const {email, password} = req?.body;
 
         if (email && password) {
 
             // Build new auth with request body info.
-            let auth: IAuth = {
+            const auth: IAuth = {
                 email: email,
                 password: password
             }
@@ -82,35 +83,6 @@ authRouter.route("/login")
             return res.status(400).send({
                 message: "[ERROR USER DATA MISSING]"
             })
-
-        }
-
-    });
-
-// Route protected by Verify Token Middleware
-authRouter.route("/me")
-    .get(verifyToken, async (req: Request, res: Response) => {
-
-        // Obtain ID of user to check its data
-        let id: any = req?.query?.id;
-
-        if(id){
-
-            // Generate new instance of AuthController
-            const controller: AuthController = new AuthController();
-
-            // Obtain response
-            const response: any = await controller.userData(id)
-
-            // Send response to client
-            return res.status(200).send(response);
-
-        } else {
-
-            // Send response to client in case of error while trying to access data unverified.
-            return res.status(401).send({
-                message: "Not authorized"
-            });
 
         }
 

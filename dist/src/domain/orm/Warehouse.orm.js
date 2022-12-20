@@ -9,26 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateWarehouseById = exports.deleteWarehouse = exports.getWarehouseById = exports.getAllWarehouses = void 0;
+exports.createWarehouse = exports.updateWarehouseById = exports.deleteWarehouse = exports.getWarehouseById = exports.getAllWarehouses = void 0;
 const Warehouse_entity_1 = require("../entities/Warehouse.entity");
 const logger_1 = require("../../utils/logger");
 // * CRUD Requests
 // Method to get all the warehouses from the Warehouses collection in MongoDB with pagination
-const getAllWarehouses = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllWarehouses = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
-        let response = {};
+        const warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
+        const response = {};
         // Search all warehouses using pagination
         yield warehouseModel.find({ isDeleted: false })
-            .select("name location stockavailable")
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .exec().then((warehouses) => {
+            .select("name location")
+            .then((warehouses) => {
             response.warehouses = warehouses;
-        });
-        yield warehouseModel.countDocuments().then((total) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
         return response;
     }
@@ -40,8 +34,8 @@ exports.getAllWarehouses = getAllWarehouses;
 // Get warehouse by ID
 const getWarehouseById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
-        return yield warehouseModel.findById(id).select("brand model price");
+        const warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
+        return yield warehouseModel.findById(id).select("name location");
     }
     catch (error) {
         (0, logger_1.LogError)(`[ORM ERROR] Getting warehouse by ID ${error}`);
@@ -51,7 +45,7 @@ exports.getWarehouseById = getWarehouseById;
 // Delete warehouse
 const deleteWarehouse = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
+        const warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
         return yield warehouseModel.deleteOne({ _id: id });
     }
     catch (error) {
@@ -62,7 +56,7 @@ exports.deleteWarehouse = deleteWarehouse;
 // Update warehouse by ID-
 const updateWarehouseById = (id, warehouses) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
+        const warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
         return yield warehouseModel.findByIdAndUpdate(id, warehouses);
     }
     catch (error) {
@@ -70,4 +64,15 @@ const updateWarehouseById = (id, warehouses) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.updateWarehouseById = updateWarehouseById;
+// Create warehouse
+const createWarehouse = (warehouse) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const warehouseModel = (0, Warehouse_entity_1.warehouseEntity)();
+        return yield warehouseModel.create(warehouse);
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`[ORM ERROR] Creating new warehouse ${error}`);
+    }
+});
+exports.createWarehouse = createWarehouse;
 //# sourceMappingURL=Warehouse.orm.js.map

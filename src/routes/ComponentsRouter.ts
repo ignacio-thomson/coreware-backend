@@ -1,10 +1,14 @@
 import express, { Request, Response } from "express";
 import { ComponentController } from "../controller/ComponentsController";
+import bodyParser from "body-parser";
 
 import { verifyToken } from "../middleware/verifyToken.middleware";
 
 // Router from express.
 const componentsRouter = express.Router();
+
+// Body parser
+const jsonParser = bodyParser.json();
 
 componentsRouter.route("/")
     // * GET
@@ -13,15 +17,11 @@ componentsRouter.route("/")
         // Obtain the ID from the URL
         const id: any = req?.query?.id;
 
-        // Pagination
-        const page: any = req?.query?.page || 1;
-        const limit: any = req?.query?.limit || 10;
-
         // Generate controller instance to execute the desired method
         const controller: ComponentController = new ComponentController();
 
         // Get the response
-        const response: any = await controller.getComponents(page, limit, id);
+        const response: any = await controller.getComponents(id);
 
         // Send response to client
         return res.status(200).send(response);
@@ -44,16 +44,16 @@ componentsRouter.route("/")
 
     })
     // * PUT
-    .put(verifyToken, async (req: Request, res: Response) => {
+    .put(jsonParser, verifyToken, async (req: Request, res: Response) => {
 
         // Obtain the ID from the URL
         const id: any = req.query.id;
 
-        // Build new component through query params
+        // Build new component through body params
         const component = {
-            brand: req?.query?.brand,
-            model: req?.query?.model,
-            price: req?.query?.price
+            brand: req?.body?.brand,
+            model: req?.body?.model,
+            price: req?.body?.price
         }
 
         // Generate controller instance to execute the desired method
@@ -63,7 +63,27 @@ componentsRouter.route("/")
         const response: any = await controller.updateComponent(id, component);
 
         // Send response to client
-        return res.status(204).send(response);
+        return res.status(200).send(response);
+
+    })
+    // * POST
+    .post(jsonParser, async (req: Request, res: Response) => {
+
+        // Build new component through body
+        const component = {
+            brand: req?.body?.brand,
+            model: req?.body?.model,
+            price: req?.body?.price
+        } 
+
+        // Generate controller instance to execute the desired method
+        const controller: ComponentController = new ComponentController();
+
+        // Get the response
+        const response: any = await controller.postComponents(component);
+
+        // Send response to client
+        return res.status(200).send(response);
 
     });
 

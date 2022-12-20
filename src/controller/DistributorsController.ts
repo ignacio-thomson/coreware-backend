@@ -1,9 +1,9 @@
 import { IDistributorController } from "./interfaces/index";
-import { Get, Route, Tags, Query, Delete, Put } from "tsoa";
+import { Get, Route, Tags, Query, Delete, Put, Post } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 
 // Import ORM
-import { getAllDistributors, getDistributorById, deleteDistributor, updateDistributorById } from "../domain/orm/Distributor.orm";
+import { getAllDistributors, getDistributorById, deleteDistributor, updateDistributorById, createDistributor } from "../domain/orm/Distributor.orm";
 
 @Route("/api/distributors")
 @Tags("Distributors")
@@ -11,12 +11,10 @@ export class DistributorController implements IDistributorController {
 
     /**
      * Endpoint to retrieve all the distributors in the collection.
-     * @param page Define the page that wants to be seen.
-     * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular distributors.
      */
     @Get("/")
-    public async getDistributors(@Query() page: number, limit: number, id?: string | undefined): Promise<any> {
+    public async getDistributors(@Query() id?: string): Promise<any> {
         
         let response: any = "";
 
@@ -24,7 +22,7 @@ export class DistributorController implements IDistributorController {
             response = await getDistributorById(id);
             LogSuccess("[/api/distributors/] GET Distributors by ID request.");
         } else {
-            response = await getAllDistributors(page, limit);
+            response = await getAllDistributors();
             LogSuccess("[/api/distributors/] GET Distributors request.");
         }
 
@@ -80,6 +78,33 @@ export class DistributorController implements IDistributorController {
             response = {
                 message: `Please provide a valid ID.`
             };
+        }
+
+        return response;
+
+    }
+
+    /**
+     * Endpoint to generate new document.
+     * @param distributor that is being created in the Database.
+     */
+    @Post("/")
+    public async postDistributor(distributor: any): Promise<any> {
+
+        let response: any = "";
+
+        if(distributor){
+            await createDistributor(distributor).then(() => {
+                response = {
+                    message: `Distributor created succesfully: ${distributor.name} - ${distributor.address}`
+                }
+            });
+            LogSuccess(`[/api/distributors] POST new Distributor: ${distributor.name}`);
+        } else {
+            LogWarning("[/api/distributors] POST new Distributor");
+            response = {
+                message: `Failed to create a new distributor, please provide a valid entry`
+            }
         }
 
         return response;

@@ -5,7 +5,7 @@ import { IUser } from "../interfaces/IUser.interface";
 // * CRUD Requests
 
 // Method to get all the users from the Users collection in MongoDB with pagination
-export const getAllUsers = async (page: number, limit: number): Promise<any | undefined> => {
+export const getAllUsers = async (): Promise<any | undefined> => {
 
     try {
 
@@ -15,15 +15,8 @@ export const getAllUsers = async (page: number, limit: number): Promise<any | un
         // Search all users using pagination
         await usersModel.find({ isDeleted: false })
         .select("firstName lastName age email")
-        .limit(limit)
-        .skip((page - 1) * limit)
-        .exec().then((users: IUser[]) => {
+        .then((users: IUser[]) => {
             response.users = users;
-        });
-
-        await usersModel.countDocuments().then((total: number) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
 
         return response;

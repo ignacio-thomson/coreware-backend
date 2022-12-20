@@ -33,7 +33,7 @@ let DistributorController = class DistributorController {
      * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular distributors.
      */
-    getDistributors(page, limit, id) {
+    getDistributors(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
@@ -41,7 +41,7 @@ let DistributorController = class DistributorController {
                 (0, logger_1.LogSuccess)("[/api/distributors/] GET Distributors by ID request.");
             }
             else {
-                response = yield (0, Distributor_orm_1.getAllDistributors)(page, limit);
+                response = yield (0, Distributor_orm_1.getAllDistributors)();
                 (0, logger_1.LogSuccess)("[/api/distributors/] GET Distributors request.");
             }
             return response;
@@ -96,12 +96,32 @@ let DistributorController = class DistributorController {
             return response;
         });
     }
+    postDistributor(distributor) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (distributor) {
+                yield (0, Distributor_orm_1.createDistributor)(distributor).then(() => {
+                    response = {
+                        message: `Distributor created succesfully: ${distributor.name} - ${distributor.address}`
+                    };
+                });
+                (0, logger_1.LogSuccess)(`[/api/distributors] POST new Distributor: ${distributor.name}`);
+            }
+            else {
+                (0, logger_1.LogWarning)("[/api/distributors] POST new Distributor");
+                response = {
+                    message: `Failed to create a new distributor, please provide a valid entry`
+                };
+            }
+            return response;
+        });
+    }
 };
 __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], DistributorController.prototype, "getDistributors", null);
 __decorate([
@@ -118,6 +138,12 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], DistributorController.prototype, "updateDistributor", null);
+__decorate([
+    (0, tsoa_1.Post)("/"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], DistributorController.prototype, "postDistributor", null);
 DistributorController = __decorate([
     (0, tsoa_1.Route)("/api/distributors"),
     (0, tsoa_1.Tags)("Distributors")

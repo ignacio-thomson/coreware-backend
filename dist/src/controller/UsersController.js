@@ -33,7 +33,7 @@ let UsersController = class UsersController {
      * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular user.
      */
-    getUsers(page, limit, id) {
+    getUsers(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
@@ -41,7 +41,7 @@ let UsersController = class UsersController {
                 (0, logger_1.LogSuccess)("[/api/users/] GET User by ID request.");
             }
             else {
-                response = yield (0, User_orm_1.getAllUsers)(page, limit);
+                response = yield (0, User_orm_1.getAllUsers)();
                 (0, logger_1.LogSuccess)("[/api/users/] GET User request.");
             }
             return response;
@@ -100,10 +100,8 @@ let UsersController = class UsersController {
 __decorate([
     (0, tsoa_1.Get)("/"),
     __param(0, (0, tsoa_1.Query)()),
-    __param(1, (0, tsoa_1.Query)()),
-    __param(2, (0, tsoa_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([

@@ -9,26 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateComponentById = exports.deleteComponent = exports.getComponentById = exports.getAllComponents = void 0;
+exports.createComponent = exports.updateComponentById = exports.deleteComponent = exports.getComponentById = exports.getAllComponents = void 0;
 const Component_entity_1 = require("../entities/Component.entity");
 const logger_1 = require("../../utils/logger");
 // * CRUD Requests
 // Method to get all the components from the Components collection in MongoDB with pagination
-const getAllComponents = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllComponents = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const componentModel = (0, Component_entity_1.componentEntity)();
         const response = {};
         // Search all components using pagination
         yield componentModel.find({ isDeleted: false })
             .select("brand model price")
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .exec().then((components) => {
+            .then((components) => {
             response.components = components;
-        });
-        yield componentModel.countDocuments().then((total) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
         return response;
     }
@@ -70,4 +64,15 @@ const updateComponentById = (id, component) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.updateComponentById = updateComponentById;
+// Create component
+const createComponent = (component) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const componentModel = (0, Component_entity_1.componentEntity)();
+        return yield componentModel.create(component);
+    }
+    catch (error) {
+        (0, logger_1.LogError)(`[ORM ERROR] Creating new component ${error}`);
+    }
+});
+exports.createComponent = createComponent;
 //# sourceMappingURL=Component.orm.js.map

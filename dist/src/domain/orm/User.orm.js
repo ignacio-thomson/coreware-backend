@@ -14,21 +14,15 @@ const User_entity_1 = require("../entities/User.entity");
 const logger_1 = require("../../utils/logger");
 // * CRUD Requests
 // Method to get all the users from the Users collection in MongoDB with pagination
-const getAllUsers = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const usersModel = (0, User_entity_1.userEntity)();
         const response = {};
         // Search all users using pagination
         yield usersModel.find({ isDeleted: false })
             .select("firstName lastName age email")
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .exec().then((users) => {
+            .then((users) => {
             response.users = users;
-        });
-        yield usersModel.countDocuments().then((total) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
         return response;
     }

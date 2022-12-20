@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.componentEntity = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const componentEntity = () => {
-    let componentSchema = new mongoose_1.default.Schema({
+    const componentSchema = new mongoose_1.default.Schema({
         brand: { type: String, required: true },
         model: { type: String, required: true },
         price: { type: Number, required: true }

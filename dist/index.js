@@ -20,4 +20,10 @@ server_1.default.listen(port, () => {
 server_1.default.on("error", (error) => {
     (0, logger_1.LogError)(`[SERVER ERROR] = ${error}`);
 });
+// ! **********************************************************************************/
+// TODO: GENERATE RELATIONS -> COMPONENTS IN WAREHOUSES -> WAREHOUSES IN DISTRIBUTORS.
+// TODO: FOLLOW USER -> KATAS EXAMPLE.
+// TODO: LOGOUT => SET TOKEN & USER TO NULL TO CLOSE THE SESSION!
+// TODO: RESEARCH AWS (CLOUD COMPUTING) EC2, ECS, NLB y ALB.
+// ! **********************************************************************************/
 //# sourceMappingURL=index.js.map

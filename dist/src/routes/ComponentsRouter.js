@@ -14,30 +14,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const ComponentsController_1 = require("../controller/ComponentsController");
+const body_parser_1 = __importDefault(require("body-parser"));
 const verifyToken_middleware_1 = require("../middleware/verifyToken.middleware");
 // Router from express.
 const componentsRouter = express_1.default.Router();
+const jsonParser = body_parser_1.default.json();
 componentsRouter.route("/")
     // * GET
     .get(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a;
     // Obtain the ID from the URL
     const id = (_a = req === null || req === void 0 ? void 0 : req.query) === null || _a === void 0 ? void 0 : _a.id;
-    // Pagination
-    const page = ((_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.page) || 1;
-    const limit = ((_c = req === null || req === void 0 ? void 0 : req.query) === null || _c === void 0 ? void 0 : _c.limit) || 10;
     // Generate controller instance to execute the desired method
     const controller = new ComponentsController_1.ComponentController();
     // Get the response
-    const response = yield controller.getComponents(page, limit, id);
+    const response = yield controller.getComponents(id);
     // Send response to client
     return res.status(200).send(response);
 }))
     // * DELETE
     .delete(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d;
+    var _b;
     // Obtain the ID from the URL
-    const id = (_d = req === null || req === void 0 ? void 0 : req.query) === null || _d === void 0 ? void 0 : _d.id;
+    const id = (_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.id;
     // Generate controller instance to execute the desired method
     const controller = new ComponentsController_1.ComponentController();
     // Get the response
@@ -46,22 +45,38 @@ componentsRouter.route("/")
     return res.status(200).send(response);
 }))
     // * PUT
-    .put(verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f, _g;
+    .put(jsonParser, verifyToken_middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e;
     // Obtain the ID from the URL
     const id = req.query.id;
-    // Build new component through query params
+    // Build new component through body params
     const component = {
-        brand: (_e = req === null || req === void 0 ? void 0 : req.query) === null || _e === void 0 ? void 0 : _e.brand,
-        model: (_f = req === null || req === void 0 ? void 0 : req.query) === null || _f === void 0 ? void 0 : _f.model,
-        price: (_g = req === null || req === void 0 ? void 0 : req.query) === null || _g === void 0 ? void 0 : _g.price
+        brand: (_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.brand,
+        model: (_d = req === null || req === void 0 ? void 0 : req.body) === null || _d === void 0 ? void 0 : _d.model,
+        price: (_e = req === null || req === void 0 ? void 0 : req.body) === null || _e === void 0 ? void 0 : _e.price
     };
     // Generate controller instance to execute the desired method
     const controller = new ComponentsController_1.ComponentController();
     // Get the response
     const response = yield controller.updateComponent(id, component);
     // Send response to client
-    return res.status(204).send(response);
+    return res.status(200).send(response);
+}))
+    // * POST
+    .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g, _h;
+    // Build new component through body params
+    const component = {
+        brand: (_f = req === null || req === void 0 ? void 0 : req.body) === null || _f === void 0 ? void 0 : _f.brand,
+        model: (_g = req === null || req === void 0 ? void 0 : req.body) === null || _g === void 0 ? void 0 : _g.model,
+        price: (_h = req === null || req === void 0 ? void 0 : req.body) === null || _h === void 0 ? void 0 : _h.price
+    };
+    // Generate controller instance to execute the desired method
+    const controller = new ComponentsController_1.ComponentController();
+    // Get the response
+    const response = yield controller.postComponents(component);
+    // Send response to client
+    return res.status(200).send(response);
 }));
 exports.default = componentsRouter;
 //# sourceMappingURL=ComponentsRouter.js.map

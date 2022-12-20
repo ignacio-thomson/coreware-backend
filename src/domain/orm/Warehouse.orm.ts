@@ -5,25 +5,18 @@ import { IWarehouse } from "../interfaces/IWarehouse.interface";
 // * CRUD Requests
 
 // Method to get all the warehouses from the Warehouses collection in MongoDB with pagination
-export const getAllWarehouses = async (page: number, limit: number): Promise<any | undefined> => {
+export const getAllWarehouses = async (): Promise<any | undefined> => {
 
     try {
 
-        let warehouseModel = warehouseEntity();
-        let response: any = {};
+        const warehouseModel = warehouseEntity();
+        const response: any = {};
 
         // Search all warehouses using pagination
         await warehouseModel.find({ isDeleted: false })
-        .select("name location stockavailable")
-        .limit(limit)
-        .skip((page - 1) * limit)
-        .exec().then((warehouses: IWarehouse[]) => {
+        .select("name location")
+        .then((warehouses: IWarehouse[]) => {
             response.warehouses = warehouses;
-        });
-
-        await warehouseModel.countDocuments().then((total: number) => {
-            response.totalPages = Math.ceil(total / limit);
-            response.currentPage = page;
         });
 
         return response;
@@ -36,8 +29,8 @@ export const getAllWarehouses = async (page: number, limit: number): Promise<any
 // Get warehouse by ID
 export const getWarehouseById = async(id: string): Promise<any | undefined> => {
     try {
-        let warehouseModel = warehouseEntity();
-        return await warehouseModel.findById(id).select("brand model price");
+        const warehouseModel = warehouseEntity();
+        return await warehouseModel.findById(id).select("name location");
     } catch (error) {
         LogError(`[ORM ERROR] Getting warehouse by ID ${error}`);
     }
@@ -46,7 +39,7 @@ export const getWarehouseById = async(id: string): Promise<any | undefined> => {
 // Delete warehouse
 export const deleteWarehouse = async(id: string): Promise<any | undefined> => {
     try {
-        let warehouseModel = warehouseEntity();
+        const warehouseModel = warehouseEntity();
         return await warehouseModel.deleteOne({ _id: id });
     } catch (error) {
         LogError(`[ORM ERROR] Deleting warehouse ${error}`);
@@ -56,9 +49,19 @@ export const deleteWarehouse = async(id: string): Promise<any | undefined> => {
 // Update warehouse by ID-
 export const updateWarehouseById = async(id: string, warehouses: any): Promise<any | undefined> => {
     try {
-        let warehouseModel = warehouseEntity();
+        const warehouseModel = warehouseEntity();
         return await warehouseModel.findByIdAndUpdate(id, warehouses);
     } catch (error) {
         LogError(`[ORM ERROR] Updating warehouse by ID ${error}`);
     }
 } 
+
+// Create warehouse
+export const createWarehouse = async(warehouse: any): Promise<any | undefined> => {
+    try {
+        const warehouseModel = warehouseEntity();
+        return await warehouseModel.create(warehouse);
+    } catch(error) {
+        LogError(`[ORM ERROR] Creating new warehouse ${error}`);
+    }
+}

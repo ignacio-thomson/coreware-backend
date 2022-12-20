@@ -26,10 +26,9 @@ const Auth_orm_1 = require("../domain/orm/Auth.orm");
 const User_orm_1 = require("../domain/orm/User.orm");
 let AuthController = class AuthController {
     /**
-     * Endpoint to retrieve all the users in the collection.
-     * @param page Define the page that wants to be seen.
-     * @param limit Define the limit of elements per page.
-     * @param id Optional id param to find a particular user.
+     * Endpoint to register a new user in the User collection.
+     * @param user that will be created.
+     * @returns the response, which in turn confirms if the user was or not created succesfully.
      */
     registerUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,8 +51,9 @@ let AuthController = class AuthController {
         });
     }
     /**
-     * Endpoint to delete a user from the collection.
-     * @param id of the user thats going to be deleted.
+     * Endpoint to log in, and be able to consume the different endpoints of the API that require a JWT verification.
+     * @param auth -> credentials used to complete the log in. (email & password)
+     * @returns the response, which in turn returns a greeting message and the token needed to consume different resources.
      */
     loginUser(auth) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -61,7 +61,7 @@ let AuthController = class AuthController {
             if (auth) {
                 let data = yield (0, Auth_orm_1.loginUser)(auth);
                 response = {
-                    message: `Bienvenido, ${data.user.firstName}`,
+                    message: `Bienvenido/a, ${data.user.firstName}`,
                     token: data.token
                 };
                 (0, logger_1.LogSuccess)(`[/api/auth/login] User logged in succesfully: ${auth.email}`);
@@ -77,23 +77,30 @@ let AuthController = class AuthController {
             return response;
         });
     }
+    /**
+     * Method to log out the user, still not implemented.
+     */
     logoutUser() {
         throw new Error("Method not implemented.");
     }
+    /**
+     * Endpoint to check our user details.
+     * @param id - self ID to check our account details
+     * @returns the response which confirms if the user information was found or not.
+     */
     userData(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
-                (0, logger_1.LogSuccess)(`[/api/users] Get user data by ID ${id}`);
                 response = yield (0, User_orm_1.getUserById)(id);
+                (0, logger_1.LogSuccess)(`[/api/auth/me] Get account details of ID: ${id}`);
             }
             else {
-                (0, logger_1.LogWarning)("[/api/users] Get user by ID request");
                 response = {
                     message: "A valid ID must be used"
                 };
+                (0, logger_1.LogWarning)("[/api/auth/me] Not able to retrieve the user information.");
             }
-            ;
             return response;
         });
     }

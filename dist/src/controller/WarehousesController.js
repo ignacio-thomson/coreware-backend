@@ -33,7 +33,7 @@ let WarehouseController = class WarehouseController {
      * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular warehouse.
      */
-    getWarehouses(page, limit, id) {
+    getWarehouses(id) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (id) {
@@ -41,7 +41,7 @@ let WarehouseController = class WarehouseController {
                 (0, logger_1.LogSuccess)("[/api/warehouses/] GET Warehouse by ID request.");
             }
             else {
-                response = yield (0, Warehouse_orm_1.getAllWarehouses)(page, limit);
+                response = yield (0, Warehouse_orm_1.getAllWarehouses)();
                 (0, logger_1.LogSuccess)("[/api/warehouses/] GET Warehouses request.");
             }
             return response;
@@ -96,12 +96,31 @@ let WarehouseController = class WarehouseController {
             return response;
         });
     }
+    postWarehouse(warehouse) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = "";
+            if (warehouse) {
+                yield (0, Warehouse_orm_1.createWarehouse)(warehouse).then(() => {
+                    response = {
+                        message: `Warehouse created succesfully: ${warehouse.name} - ${warehouse.location}`
+                    };
+                });
+                (0, logger_1.LogSuccess)(`[/api/warehouses] POST new Warehouse: ${warehouse.name}`);
+            }
+            else {
+                (0, logger_1.LogWarning)("[/api/warehouses] POST new Warehouse");
+                response = {
+                    message: `Failed to create a new warehouse, please provide a valid entry`
+                };
+            }
+            return response;
+        });
+    }
 };
 __decorate([
     (0, tsoa_1.Get)("/"),
-    __param(0, (0, tsoa_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], WarehouseController.prototype, "getWarehouses", null);
 __decorate([
@@ -118,6 +137,12 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], WarehouseController.prototype, "updateWarehouse", null);
+__decorate([
+    (0, tsoa_1.Post)("/"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], WarehouseController.prototype, "postWarehouse", null);
 WarehouseController = __decorate([
     (0, tsoa_1.Route)("/api/warehouses"),
     (0, tsoa_1.Tags)("Warehouses")

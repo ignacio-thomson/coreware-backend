@@ -4,14 +4,9 @@
   "description": "Coreware application backend developed with Nodejs and Express",
   "main": "index.js",
   "scripts": {
-    "swagger": "tsoa spec",
-    "nodemon:swagger": "nodemon -x tsoa spec",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "test": "jest",
-    "serve:coverage": "npm run test && cd coverage/lcov-report && npx serve",
     "build": "npx webpack --mode development",
-    "start": "node dist/index.js",
-    "build:prod": "npx webpack --mode production"
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +17,6 @@
     "node",
     "react",
     "jest",
-    "swagger",
     "mongoose"
   ],
   "author": "Ignacio Thomson",
@@ -41,6 +35,7 @@
     "helmet": "^6.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.0",
+    "pm2": "^5.2.2",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.6.0",
     "tsoa": "^4.1.3",

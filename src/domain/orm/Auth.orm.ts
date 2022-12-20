@@ -43,11 +43,11 @@ export const loginUser = async(auth: IAuth): Promise<any | undefined> => {
         await userModel.findOne({ email: auth.email }).then((user: IUser) => {
             userFound = user;
         }).catch((error) => {
-            console.error(`[AUTH ERROR IN ORM] > User not found`);
-            throw new Error(`[AUTH ERROR IN ORM] > User not found ${error}`)
+            console.error(`[AUTH ERROR IN ORM] User not found`);
+            throw new Error(`[AUTH ERROR IN ORM] User not found ${error}`)
         });
 
-        let validPassword = bcrypt.compareSync(auth.password, userFound!.password);
+        const validPassword = bcrypt.compareSync(auth.password, userFound!.password);
 
 
         if(!validPassword){
@@ -69,9 +69,4 @@ export const loginUser = async(auth: IAuth): Promise<any | undefined> => {
         LogError(`[ORM ERROR] > Error while logging user in ${error}`);
     }
 
-}
-
-// Logout user
-export const logoutUser = async(): Promise<any | undefined> => {
-    return "Method not implemented yet."
 }

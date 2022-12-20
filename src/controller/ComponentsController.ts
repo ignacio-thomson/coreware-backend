@@ -1,9 +1,9 @@
 import { IComponentController } from "./interfaces/index";
-import { Get, Route, Tags, Query, Delete, Put } from "tsoa";
+import { Get, Route, Tags, Query, Delete, Put, Post } from "tsoa";
 import { LogSuccess, LogWarning } from "../utils/logger";
 
 // Import ORM
-import { getAllComponents, getComponentById, deleteComponent, updateComponentById } from "../domain/orm/Component.orm";
+import { getAllComponents, getComponentById, deleteComponent, updateComponentById, createComponent } from "../domain/orm/Component.orm";
 
 @Route("/api/components")
 @Tags("Components")
@@ -11,12 +11,10 @@ export class ComponentController implements IComponentController {
 
     /**
      * Endpoint to retrieve all the components in the collection.
-     * @param page Define the page that wants to be seen.
-     * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular component.
      */
     @Get("/")
-    public async getComponents(@Query() page: number, @Query() limit: number, @Query() id?: string): Promise<any> {
+    public async getComponents(@Query() id?: string): Promise<any> {
         
         let response: any = "";
 
@@ -24,7 +22,7 @@ export class ComponentController implements IComponentController {
             response = await getComponentById(id);
             LogSuccess("[/api/components/] GET Component by ID request.");
         } else {
-            response = await getAllComponents(page, limit);
+            response = await getAllComponents();
             LogSuccess("[/api/components/] GET Components request.");
         }
 
@@ -80,6 +78,33 @@ export class ComponentController implements IComponentController {
             response = {
                 message: `Please provide a valid ID.`
             };
+        }
+
+        return response;
+
+    }
+
+    /**
+     * Endpoint to generate new document.
+     * @param component that is being created in the Database
+     */
+    @Post("/")
+    public async postComponents(component: any): Promise<any> {
+
+        let response: any = "";
+
+        if(component){
+            await createComponent(component).then(() => {
+                response = {
+                    message: `Component created succesfully: ${component.brand} - ${component.model}`
+                }
+            });
+            LogSuccess(`[/api/components] POST new Component: ${component.brand}`);
+        } else {
+            LogWarning("[/api/components] POST new Component");
+            response = {
+                message: `Failed to create a new component, please provide a valid entry`
+            }
         }
 
         return response;
