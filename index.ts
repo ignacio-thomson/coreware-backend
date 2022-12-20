@@ -1,4 +1,4 @@
-// Variables de entorno
+// Env. variables
 import dotenv from "dotenv";
 // Server
 import server from "./src/server";

@@ -1,6 +1,9 @@
 // Express
 import express, { Express, Request, Response } from "express";
 
+// Env. variables
+import dotenv from "dotenv";
+
 // Security
 import cors from "cors";
 import helmet from "helmet";
@@ -12,14 +15,18 @@ import mongoose from "mongoose";
 // Create Express APP
 const server: Express = express();
 
+// Configure .env file
+dotenv.config();
+
 // Define base route as /api
 server.use("/api", routes);
+
 
 // Define static server
 server.use(express.static("public"));
 
 // Mongoose (MongoDB) connection
-mongoose.connect("mongodb://127.0.0.1:27017/codeware").then(() => {
+mongoose.connect(<string>process.env.MONGO_URL).then(() => {
     console.log("Connection to database established succesfully");
 }).catch((err) => {
     console.log("[ERROR] Couldn't establish connection", err);
