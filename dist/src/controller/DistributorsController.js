@@ -29,8 +29,6 @@ const Distributor_orm_1 = require("../domain/orm/Distributor.orm");
 let DistributorController = class DistributorController {
     /**
      * Endpoint to retrieve all the distributors in the collection.
-     * @param page Define the page that wants to be seen.
-     * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular distributors.
      */
     getDistributors(id) {
@@ -96,6 +94,10 @@ let DistributorController = class DistributorController {
             return response;
         });
     }
+    /**
+     * Endpoint to generate new document.
+     * @param distributor that is being created in the Database.
+     */
     postDistributor(distributor) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";

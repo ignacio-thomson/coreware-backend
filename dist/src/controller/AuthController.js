@@ -23,7 +23,6 @@ const tsoa_1 = require("tsoa");
 const logger_1 = require("../utils/logger");
 // Import ORM
 const Auth_orm_1 = require("../domain/orm/Auth.orm");
-const User_orm_1 = require("../domain/orm/User.orm");
 let AuthController = class AuthController {
     /**
      * Endpoint to register a new user in the User collection.
@@ -31,14 +30,15 @@ let AuthController = class AuthController {
      * @returns the response, which in turn confirms if the user was or not created succesfully.
      */
     registerUser(user) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";
             if (user) {
-                yield (0, Auth_orm_1.registerUser)(user).then(() => {
+                yield ((_a = (0, Auth_orm_1.registerUser)(user)) === null || _a === void 0 ? void 0 : _a.then(() => {
                     response = {
                         message: `User registered succesfully ${user.firstName} ${user.lastName}`
                     };
-                });
+                }));
                 (0, logger_1.LogSuccess)(`[/api/auth/register] New user registered succesfully ${user.firstName} ${user.lastName}`);
             }
             else {
@@ -59,9 +59,9 @@ let AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             let response;
             if (auth) {
-                let data = yield (0, Auth_orm_1.loginUser)(auth);
+                const data = yield (0, Auth_orm_1.loginUser)(auth);
                 response = {
-                    message: `Bienvenido/a, ${data.user.firstName}`,
+                    message: `Welcome, ${data.user.firstName}`,
                     token: data.token
                 };
                 (0, logger_1.LogSuccess)(`[/api/auth/login] User logged in succesfully: ${auth.email}`);
@@ -74,33 +74,6 @@ let AuthController = class AuthController {
                 (0, logger_1.LogWarning)("[/api/users/login] A valid user is needed to log in.");
             }
             console.log(response);
-            return response;
-        });
-    }
-    /**
-     * Method to log out the user, still not implemented.
-     */
-    logoutUser() {
-        throw new Error("Method not implemented.");
-    }
-    /**
-     * Endpoint to check our user details.
-     * @param id - self ID to check our account details
-     * @returns the response which confirms if the user information was found or not.
-     */
-    userData(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let response = "";
-            if (id) {
-                response = yield (0, User_orm_1.getUserById)(id);
-                (0, logger_1.LogSuccess)(`[/api/auth/me] Get account details of ID: ${id}`);
-            }
-            else {
-                response = {
-                    message: "A valid ID must be used"
-                };
-                (0, logger_1.LogWarning)("[/api/auth/me] Not able to retrieve the user information.");
-            }
             return response;
         });
     }
@@ -117,12 +90,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "loginUser", null);
-__decorate([
-    (0, tsoa_1.Get)("/me"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "userData", null);
 AuthController = __decorate([
     (0, tsoa_1.Route)("/api/auth"),
     (0, tsoa_1.Tags)("Users")

@@ -29,8 +29,6 @@ const Component_orm_1 = require("../domain/orm/Component.orm");
 let ComponentController = class ComponentController {
     /**
      * Endpoint to retrieve all the components in the collection.
-     * @param page Define the page that wants to be seen.
-     * @param limit Define the limit of elements per page.
      * @param id Optional id param to find a particular component.
      */
     getComponents(id) {
@@ -96,6 +94,10 @@ let ComponentController = class ComponentController {
             return response;
         });
     }
+    /**
+     * Endpoint to generate new document.
+     * @param component that is being created in the Database
+     */
     postComponents(component) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";

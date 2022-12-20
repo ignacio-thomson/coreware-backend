@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
+exports.loginUser = exports.registerUser = void 0;
 const User_entity_1 = require("../entities/User.entity");
 const logger_1 = require("../../utils/logger");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -45,10 +45,10 @@ const loginUser = (auth) => __awaiter(void 0, void 0, void 0, function* () {
         yield userModel.findOne({ email: auth.email }).then((user) => {
             userFound = user;
         }).catch((error) => {
-            console.error(`[AUTH ERROR IN ORM] > User not found`);
-            throw new Error(`[AUTH ERROR IN ORM] > User not found ${error}`);
+            console.error(`[AUTH ERROR IN ORM] User not found`);
+            throw new Error(`[AUTH ERROR IN ORM] User not found ${error}`);
         });
-        let validPassword = bcrypt_1.default.compareSync(auth.password, userFound.password);
+        const validPassword = bcrypt_1.default.compareSync(auth.password, userFound.password);
         if (!validPassword) {
             console.error(`[AUTH ERROR IN ORM] > Invalid password`);
             throw new Error(`[AUTH ERROR IN ORM] > Invalid password`);
@@ -67,9 +67,4 @@ const loginUser = (auth) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.loginUser = loginUser;
-// Logout user
-const logoutUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    return "Method not implemented yet.";
-});
-exports.logoutUser = logoutUser;
 //# sourceMappingURL=Auth.orm.js.map

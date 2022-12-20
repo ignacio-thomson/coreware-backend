@@ -18,6 +18,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const verifyToken_middleware_1 = require("../middleware/verifyToken.middleware");
 // Router from express.
 const componentsRouter = express_1.default.Router();
+// Body parser
 const jsonParser = body_parser_1.default.json();
 componentsRouter.route("/")
     // * GET
@@ -65,7 +66,7 @@ componentsRouter.route("/")
     // * POST
     .post(jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g, _h;
-    // Build new component through body params
+    // Build new component through body
     const component = {
         brand: (_f = req === null || req === void 0 ? void 0 : req.body) === null || _f === void 0 ? void 0 : _f.brand,
         model: (_g = req === null || req === void 0 ? void 0 : req.body) === null || _g === void 0 ? void 0 : _g.model,

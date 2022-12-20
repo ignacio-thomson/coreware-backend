@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Variables de entorno
+// Env. variables
 const dotenv_1 = __importDefault(require("dotenv"));
 // Server
 const server_1 = __importDefault(require("./src/server"));
@@ -20,10 +20,4 @@ server_1.default.listen(port, () => {
 server_1.default.on("error", (error) => {
     (0, logger_1.LogError)(`[SERVER ERROR] = ${error}`);
 });
-// ! **********************************************************************************/
-// TODO: GENERATE RELATIONS -> COMPONENTS IN WAREHOUSES -> WAREHOUSES IN DISTRIBUTORS.
-// TODO: FOLLOW USER -> KATAS EXAMPLE.
-// TODO: LOGOUT => SET TOKEN & USER TO NULL TO CLOSE THE SESSION!
-// TODO: RESEARCH AWS (CLOUD COMPUTING) EC2, ECS, NLB y ALB.
-// ! **********************************************************************************/
 //# sourceMappingURL=index.js.map

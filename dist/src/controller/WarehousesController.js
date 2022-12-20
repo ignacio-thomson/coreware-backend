@@ -96,6 +96,10 @@ let WarehouseController = class WarehouseController {
             return response;
         });
     }
+    /**
+     * Endpoint to generate new document.
+     * @param warehouse that is going to be created in the Database.
+     */
     postWarehouse(warehouse) {
         return __awaiter(this, void 0, void 0, function* () {
             let response = "";

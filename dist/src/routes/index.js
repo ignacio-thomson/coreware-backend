@@ -21,7 +21,7 @@ const rootRouter = express_1.default.Router();
 // Get base URL
 rootRouter.get("/", (req, res) => {
     (0, logger_1.LogInfo)("GET: http://localhost:8000/api");
-    res.send("Welcome to my API RESTful, Coreware.");
+    res.send("Codeware root directory. You shouldn't be seeing this!");
 });
 server.use("/", rootRouter);
 server.use("/components", ComponentsRouter_1.default);
