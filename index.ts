@@ -12,7 +12,7 @@ const port: number | string = process.env.PORT || 8000;
 
 // Exec server
 server.listen(port, () => {
-    LogSuccess(`Server is now ON in http://localhost:${port}/`);
+    LogSuccess(`Server is now ON in https://coreware-backend-production.up.railway.app/api`);
 });
 
 // Log server

@@ -14,7 +14,7 @@ dotenv_1.default.config();
 const port = process.env.PORT || 8000;
 // Exec server
 server_1.default.listen(port, () => {
-    (0, logger_1.LogSuccess)(`Server is now ON in http://localhost:${port}/`);
+    (0, logger_1.LogSuccess)(`Server is now ON in https://coreware-backend-production.up.railway.app/api`);
 });
 // Log server
 server_1.default.on("error", (error) => {

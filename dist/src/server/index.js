@@ -22,7 +22,7 @@ server.use("/api", routes_1.default);
 // Define static server
 server.use(express_1.default.static("public"));
 // Mongoose (MongoDB) connection
-mongoose_1.default.connect(process.env.MONGO_URL).then(() => {
+mongoose_1.default.connect(process.env.MONGO_URL + "/codeware").then(() => {
     console.log("Connection to database established succesfully");
 }).catch((err) => {
     console.log("[ERROR] Couldn't establish connection", err);

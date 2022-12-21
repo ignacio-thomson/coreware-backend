@@ -18,7 +18,7 @@ const rootRouter = express.Router();
 
 // Get base URL
 rootRouter.get("/", (req: Request, res: Response) => {
-    LogInfo("GET: http://localhost:8000/api");
+    LogInfo("GET: https://coreware-backend-production.up.railway.app/api");
     res.send("Codeware root directory. You shouldn't be seeing this!");
 });
 
